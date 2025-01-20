@@ -1,4 +1,9 @@
 ### Usage
+Sure, here's the translation:
+
+> Prerequisites
+> - Windows platform
+> - Git environment installed on the local machine (all command operations are performed in Git Bash)
 
 - Download the entire project and unzip the project archive to a custom directory.
 - Configure the environment variables.
