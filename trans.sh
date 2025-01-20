@@ -206,31 +206,33 @@ for file in "$source_path"/*.$selected_source_format; do
         input_file_name="$(basename "$file")"
         output_file_name="$(basename "$file" .$selected_source_format)"
         echo "转换：$input_file_name"
-        
-        if [[ $selected_source -eq 1 && $selected_target -eq 1 ]];then
+        if [[ $selected_source -eq 1 && $selected_target -eq 1 && $selected_source_format == "wmv" ]];
+            # wmv视频->视频（需要GPU加速）
+            ffmpeg -hwaccel cuda -i "$input_file_name" -c:v h264_nvenc "$output_file_name.$selected_target_format" >> ffmpeg_output.log 2>&1
+        elif [[ $selected_source -eq 1 && $selected_target -eq 1 ]];then
             # 视频->视频
-            ffmpeg -i "$input_file_name" -c:v copy -c:a copy "$output_file_name.$selected_target_format" > ffmpeg_output.log 2>&1
+            ffmpeg -i "$input_file_name" -c:v copy -c:a copy "$output_file_name.$selected_target_format" >> ffmpeg_output.log 2>&1
         elif [[ $selected_source -eq 2 && $selected_target -eq 2 ]];then
             # 音频 -> 音频
-            ffmpeg -i "$input_file_name" -c copy "$output_file_name.$selected_target_format" > ffmpeg_output.log 2>&1
+            ffmpeg -i "$input_file_name" -c copy "$output_file_name.$selected_target_format" >> ffmpeg_output.log 2>&1
         elif [[ $selected_source -eq 1 && $selected_target -eq 2 ]];then
             # 视频 -> 音频
             if [[ $selected_target_format == "mp3" ]];then
-                ffmpeg -i "$input_file_name" -vn -acodec mp3 "$output_file_name.$selected_target_format" > ffmpeg_output.log 2>&1
+                ffmpeg -i "$input_file_name" -vn -acodec mp3 "$output_file_name.$selected_target_format" >> ffmpeg_output.log 2>&1
             elif [[ $selected_target_format == "wav" ]];then
-                ffmpeg -i "$input_file_name" -vn -acodec pcm_s16le "$output_file_name.$selected_target_format" > ffmpeg_output.log 2>&1
+                ffmpeg -i "$input_file_name" -vn -acodec pcm_s16le "$output_file_name.$selected_target_format" >> ffmpeg_output.log 2>&1
             elif [[ $selected_target_format == "aac"
             || $selected_target_format == "ogg"
             || $selected_target_format == "m4a" ]];then
-                ffmpeg -i "$input_file_name"  -vn -acodec copy "$output_file_name.$selected_target_format" > ffmpeg_output.log 2>&1
+                ffmpeg -i "$input_file_name"  -vn -acodec copy "$output_file_name.$selected_target_format" >> ffmpeg_output.log 2>&1
             elif [[ $selected_target_format == "flac" ]];then
-                ffmpeg -i "$input_file_name" -vn -acodec flac "$output_file_name.$selected_target_format" > ffmpeg_output.log 2>&1
+                ffmpeg -i "$input_file_name" -vn -acodec flac "$output_file_name.$selected_target_format" >> ffmpeg_output.log 2>&1
             elif [[ $selected_target_format == "m4a" ]];then
-                ffmpeg -i "$input_file_name" -vn -c:a alac "$output_file_name.$selected_target_format" > ffmpeg_output.log 2>&1
+                ffmpeg -i "$input_file_name" -vn -c:a alac "$output_file_name.$selected_target_format" >> ffmpeg_output.log 2>&1
             elif [[ $selected_target_format == "wma" ]];then
-                ffmpeg -i "$input_file_name" -vn -acodec wmav2 -ab 128k "$output_file_name.$selected_target_format" > ffmpeg_output.log 2>&1
+                ffmpeg -i "$input_file_name" -vn -acodec wmav2 -ab 128k "$output_file_name.$selected_target_format" >> ffmpeg_output.log 2>&1
             elif [[ $selected_target_format == "opus" ]];then
-                ffmpeg -i "$input_file_name" -vn -c:a libopus "$output_file_name.$selected_target_format" > ffmpeg_output.log 2>&1
+                ffmpeg -i "$input_file_name" -vn -c:a libopus "$output_file_name.$selected_target_format" >> ffmpeg_output.log 2>&1
             fi
         fi
     else
