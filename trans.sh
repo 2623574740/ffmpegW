@@ -181,20 +181,20 @@ elif [ -z "$target_path" ];then
 elif [ ! -d "$target_path" ];then
     mkdir $target_path
 fi
-
-for file in "$source_path"/*.$selected_source_format; do
-    # 确保是文件而不是目录
-    if [ -f "$file" ]; then
-        # 提取文件名并去掉路径
-        filename=$(basename "$file")
-        # 去掉文件名中的空格
-        new_filename=$(echo "$filename" | tr -d ' ')
-        # 如果文件名发生了变化，重命名文件
-        if [ "$filename" != "$new_filename" ]; then
-            mv "$file" "$target_directory/$new_filename"
-        fi
-    fi
-done
+# 屏蔽重命名逻辑，解决可能造成文件丢失的bug
+# for file in "$source_path"/*.$selected_source_format; do
+#     # 确保是文件而不是目录
+#     if [ -f "$file" ]; then
+#         # 提取文件名并去掉路径
+#         filename=$(basename "$file")
+#         # 去掉文件名中的空格
+#         new_filename=$(echo "$filename" | tr -d ' ')
+#         # 如果文件名发生了变化，重命名文件
+#         if [ "$filename" != "$new_filename" ]; then
+#             mv "$file" "$target_directory/$new_filename"
+#         fi
+#     fi
+# done
 
 # 再次遍历文件夹，过滤出所有 selected_source_format 后缀的文件
 success_count=0
